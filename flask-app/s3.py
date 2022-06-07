@@ -18,7 +18,7 @@ s3 = boto3.resource("s3")
 client = s3.meta.client
 try:
     result = client.head_bucket(Bucket=bucket)
-    print(result)
+    print(result) # debug bucket
 except ClientError:
     # The bucket does not exist or you have no access.
     print(f"bucket {bucket} not found")
@@ -26,7 +26,8 @@ except ClientError:
     s3.create_bucket(
         Bucket=bucket, CreateBucketConfiguration={"LocationConstraint": region}
     )
-    
+    print("bucket has been created")
+
 except client.exceptions.BucketAlreadyExists:
     print(f"sorry the bucket {bucket} already exists in {region}")
 
