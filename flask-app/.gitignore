@@ -347,3 +347,5 @@ $RECYCLE.BIN/
 
 #our venv files
 *env 
+
+img/
