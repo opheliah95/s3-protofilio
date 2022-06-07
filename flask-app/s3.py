@@ -1,7 +1,7 @@
 import boto3
 import os
 from botocore.client import ClientError
-from botocore.errorfactory import BucketAlreadyExists
+
 # load environment variable
 from dotenv import load_dotenv
 
@@ -15,9 +15,9 @@ print(f"bucket name is {bucket}")
 
 # use s3 bucket as resource
 s3 = boto3.resource("s3")
-
+client = s3.meta.client
 try:
-    result = s3.meta.client.head_bucket(Bucket=bucket)
+    result = client.head_bucket(Bucket=bucket)
     print(result)
 except ClientError:
     # The bucket does not exist or you have no access.
@@ -26,7 +26,9 @@ except ClientError:
     s3.create_bucket(
         Bucket=bucket, CreateBucketConfiguration={"LocationConstraint": region}
     )
-except BucketAlreadyExists:
+    
+except client.exceptions.BucketAlreadyExists:
+    print(f"sorry the bucket {bucket} already exists in {region}")
 
 
 # list all our buckets
